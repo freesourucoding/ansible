@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: set hostname
+      shell: hostnamectl set-hostname {{ hostname }}
+
+    - name: set ipaddr
+      template:
+        src: ./ifcfg-ens32.j2
+        dest: /etc/sysconfig/network-scripts/ifcfg-ens32
+
+    - name: restart network
+      shell: systemctl restart network

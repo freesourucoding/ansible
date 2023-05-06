@@ -1,0 +1,9 @@
+TYPE=Ethernet
+BOOTPROTO=none
+DEFROUTE=yes
+NAME=ens32
+DEVICE=ens32
+ONBOOT=yes
+IPADDR={{ ansible_ens32.ipv4.address }}
+NETMASK=255.255.255.0
+GATEWAY=192.168.59.2
