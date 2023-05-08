@@ -1,13 +1,149 @@
 - hosts: all
   gather_facts: yes
   tasks:
-    - name: set hostname
-      shell: hostnamectl set-hostname {{ hostname }}
-
-    - name: set ipaddr
-      template:
-        src: ./ifcfg-ens32.j2
-        dest: /etc/sysconfig/network-scripts/ifcfg-ens32
-
-    - name: restart network
-      shell: systemctl restart network
+#    - name: set hostname
+#      shell: hostnamectl set-hostname {{ hostname }}
+#
+#    - name: set ipaddr
+#      template:
+#        src: ./ifcfg-ens32.j2
+#        dest: /etc/sysconfig/network-scripts/ifcfg-ens32
+#
+#    - name: restart network
+#      systemd:
+#        name: network
+#        state: restarted
+#        enabled: yes
+# 
+#    - name: delete original yum repo file
+#      file:
+#        path: /etc/yum.repos.d/
+#        state: absent
+#
+#    - name: create directory of /etc/yum.repos.d/
+#      file:
+#        path: /etc/yum.repos.d/
+#        state: directory
+#        owner: root
+#        group: root
+#        mode: 755
+#
+#    - name: yum base repo
+#      yum_repository:
+#        file: Centos-7
+#        name: Centos7-base
+#        description: Centos7-base
+#        baseurl: http://192.168.59.144/centos7
+#        enabled: yes
+#        gpgcheck: no 
+#
+#    - name: yum packages repo
+#      yum_repository:
+#        file: packages
+#        name: packages
+#        description: packages
+#        baseurl: http://192.168.59.144/packages
+#        enabled: yes
+#        gpgcheck: no
+#
+#    - name: yum git repo
+#      yum_repository:
+#        file: git
+#        name: git
+#        description: git
+#        baseurl: http://192.168.59.144/git
+#        enabled: yes
+#        gpgcheck: no
+#
+#    - name: install packages
+#      yum:
+#        name: yum-utils
+#        state: present
+#    - name: install device-mapp-persistent-data
+#      yum:
+#        name: device-mapper-persistent-data
+#        state: present
+#    - name: install lvm2
+#      yum:
+#        name: lvm2
+#        state: present
+#    - name: install wget
+#      yum:
+#        name: wget
+#        state: present
+#    - name: install jq
+#      yum: 
+#        name: jq
+#        state: present
+#    - name: install psmisc
+#      yum: 
+#        name: psmisc
+#        state: present
+#    - name: install vim
+#      yum: 
+#        name: vim
+#        state: present
+#    - name: install net-tools
+#      yum: 
+#        name: net-tools
+#        state: present
+#    - name: install telnet
+#      yum: 
+#        name: telnet
+#        state: present
+#    - name: install git
+#      yum: 
+#        name: git
+#        state: present
+#     - name: disable firewalld
+#       systemd:
+#         name: firewalld
+#         enabled: no
+#         state: stopped
+#     - name: disable dnsmasq
+#       systemd:
+#         name: dnsmasq
+#         enabled: no
+#         state: stopped
+#     - name: disable NetworkManager
+#       systemd:
+#         name: NetworkManager
+#         enabled: no
+#         state: stopped
+#     - name: disable selinux
+#       selinux:
+#         state: disabled
+#     - name: disable selinux config
+#       replace:
+#         path: /etc/selinux/config
+#         regexp: "=enforcing" 
+#         replace: "=disabled"
+#     - name: disable sysconfig selinux
+#       replace:
+#         path: /etc/sysconfig/selinux
+#         regexp: "=enforcing"
+#         replace: "=disabled"
+#     - name: swapoff
+#       shell: swapoff -a && sysctl -w vm.swappiness=0
+#     - name: disable swap
+#       replace:
+#         path: /etc/fstab
+#         regexp: "/dev/mapper/vg00-swap"
+#         replace: "# /dev/mapper/vg00-swap"
+#      - name: install chrony
+#        yum:
+#          name: chrony
+#          state: present
+#      - name: enable chrony
+#        systemd:
+#          name: chronyd
+#          state: started
+#          enabled: yes
+       - name: configure chrony
+         template:
+           src: ./chrony.conf.j2
+           dest: /etc/chrony.conf  
+       - name: restart chronyd
+         systemd:
+           name: chronyd
+           state: restarted
